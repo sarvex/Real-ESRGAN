@@ -73,12 +73,8 @@ def main():
         print('Testing', idx, imgname)
 
         img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
-        if len(img.shape) == 3 and img.shape[2] == 4:
-            img_mode = 'RGBA'
-        else:
-            img_mode = None
-
-        h, w = img.shape[0:2]
+        img_mode = 'RGBA' if len(img.shape) == 3 and img.shape[2] == 4 else None
+        h, w = img.shape[:2]
         if max(h, w) > 1000 and args.netscale == 4:
             import warnings
             warnings.warn('The input image is large, try X2 model for better performace.')
@@ -95,10 +91,7 @@ def main():
             print('Error', error)
             print('If you encounter CUDA out of memory, try to set --tile with a smaller number.')
         else:
-            if args.ext == 'auto':
-                extension = extension[1:]
-            else:
-                extension = args.ext
+            extension = extension[1:] if args.ext == 'auto' else args.ext
             if img_mode == 'RGBA':  # RGBA images should be saved in png format
                 extension = 'png'
             save_path = os.path.join(args.output, f'{imgname}_{args.suffix}.{extension}')

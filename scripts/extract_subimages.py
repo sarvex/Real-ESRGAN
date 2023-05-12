@@ -37,16 +37,15 @@ def main(args):
         Remember to modify opt configurations according to your settings.
     """
 
-    opt = {}
-    opt['n_thread'] = args.n_thread
-    opt['compression_level'] = args.compression_level
-
-    # HR images
-    opt['input_folder'] = args.input
-    opt['save_folder'] = args.output
-    opt['crop_size'] = args.crop_size
-    opt['step'] = args.step
-    opt['thresh_size'] = args.thresh_size
+    opt = {
+        'n_thread': args.n_thread,
+        'compression_level': args.compression_level,
+        'input_folder': args.input,
+        'save_folder': args.output,
+        'crop_size': args.crop_size,
+        'step': args.step,
+        'thresh_size': args.thresh_size,
+    }
     extract_subimages(opt)
 
 
@@ -106,7 +105,7 @@ def worker(path, opt):
 
     img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
 
-    h, w = img.shape[0:2]
+    h, w = img.shape[:2]
     h_space = np.arange(0, h - crop_size + 1, step)
     if h - (h_space[-1] + crop_size) > thresh_size:
         h_space = np.append(h_space, h - crop_size)
@@ -123,8 +122,7 @@ def worker(path, opt):
             cv2.imwrite(
                 osp.join(opt['save_folder'], f'{img_name}_s{index:03d}{extension}'), cropped_img,
                 [cv2.IMWRITE_PNG_COMPRESSION, opt['compression_level']])
-    process_info = f'Processing {img_name} ...'
-    return process_info
+    return f'Processing {img_name} ...'
 
 
 if __name__ == '__main__':

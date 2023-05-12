@@ -32,7 +32,7 @@ def main(args):
             ratio = width / height
             height = shortest_edge
             width = int(height * ratio)
-        rlt = img.resize((int(width), int(height)), resample=Image.LANCZOS)
+        rlt = img.resize((width, height), resample=Image.LANCZOS)
         rlt.save(os.path.join(args.output, f'{basename}T{idx+1}.png'))
 
 
